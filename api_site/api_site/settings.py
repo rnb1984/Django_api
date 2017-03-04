@@ -41,12 +41,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware', # caching update
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware', # caching fetch
 ]
 
 ROOT_URLCONF = 'api_site.urls'
@@ -117,4 +119,27 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+STATIC_PATH = os.path.join( BASE_DIR,'static' )
+
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    STATIC_PATH,
+]
+
+CACHES = {
+   'default': {
+       'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+       #'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+       #'LOCATION': '127.0.0.1:11211',
+       'TIMEOUT': 60,
+   },
+   'db_cached':{
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
+
+CACHE_MIDDLEWARE_ALIAS = 'db_cached' #'default'
+CACHE_MIDDLEWARE_SECONDS = 600
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
