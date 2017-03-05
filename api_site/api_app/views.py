@@ -19,6 +19,7 @@ def mobileAPI( request ):
     	context_dict = get_data()
     	return JsonResponse( context_dict )
     elif request.method == 'POST':
+    	# do something to retreave item by key 
     	return JsonResponse( context_dict )
     else:
     	raise PermissionDenied
@@ -28,6 +29,17 @@ def populate_db( request ):
 	if request.method == 'GET':
 		docs = ClientCSV().populate()
 		return HttpResponse( "Populated" )
+
+def mobileAPI_unhandled( request ):
+
+    context_dict = {}
+    if request.method == 'GET':
+    	context_dict = ClientCSV().unhandled_csv()
+    	print 'dict?', context_dict
+    	return JsonResponse( context_dict )
+    else:
+    	raise PermissionDenied
+    	return HttpResponse("No permision")
 
 def get_data():
 	data = {}

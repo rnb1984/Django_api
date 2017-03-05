@@ -35,9 +35,10 @@ class ClientCSV():
 
         print 'response : ', response
 
-        csv_doc = csv.reader( response )
+        return csv.reader( response )
 
-        print 'csv_doc : ', csv_doc
+    def handled_csv( self ):
+        csv_doc = self.get_csv()
 
         image_handler = ImageDataHandler( )
         doc = []
@@ -59,8 +60,22 @@ class ClientCSV():
 
         return doc
 
+    def unhandled_csv( self ):
+        csv_doc = self.get_csv()
+        doc = []
+
+        for row in csv_doc:
+            doc_row = {
+            'title' : row[ 0 ],
+            'description' : row[ 1 ],
+            'image' : row[ -1 ]
+            }
+            doc.append( doc_row )
+
+        return { 'data' : doc }
+
     def populate(self):
-        all_docs = self.get_csv()
+        all_docs = self.handled_csv()
 
         for row in all_docs:
             mobile_data = MobileAPI.objects.get_or_create(
