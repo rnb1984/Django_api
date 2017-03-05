@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'api_app',
 ]
 
 MIDDLEWARE = [
@@ -127,19 +128,22 @@ STATICFILES_DIRS = [
     STATIC_PATH,
 ]
 
+STATIC_ROOT = os.path.join( os.path.dirname(BASE_DIR),'static_api' )
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join( os.path.dirname(BASE_DIR),'media_api' )
+
+
+
 CACHES = {
    'default': {
        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
        #'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
        #'LOCATION': '127.0.0.1:11211',
-       'TIMEOUT': 60,
-   },
-   'db_cached':{
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'my_cache_table',
-    }
+       'TIMEOUT': 10,
+   }
 }
 
-CACHE_MIDDLEWARE_ALIAS = 'db_cached' #'default'
-CACHE_MIDDLEWARE_SECONDS = 600
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 100
 CACHE_MIDDLEWARE_KEY_PREFIX = ''
